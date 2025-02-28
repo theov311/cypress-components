@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>A simple todolist with Alpine JS & Tailwind CSS</title>
+
+        <!-- Tailwind CSS -->
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+        <!-- Alpine JS -->
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+        <!-- Font awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+    </head>
+
+    <body class="antialiased bg-gray-200" style="font-family: 'Montserrat';">
+
+        <div class="flex flex-col h-screen">    
+            <div x-data="todolist()" class="m-auto">
+                <div class="bg-white m-auto p-8 shadow-md w-80">
+                    <!-- Title -->
+                    <h1 class="text-lg font-extrabold mt-4">Todolist</h1>
+                    <h2 class="text-sm text-gray-400 mb-8">Alpine JS & Tailwind CSS</h1>
+    
+                    <!-- Todolist -->
+                    <div class="flex items-center mb-4">
+                        <input type="text" 
+                                class="leading-6 text-xs bg-gray-100 p-2 focus:outline-none text-gray-600 w-full" 
+                                x-model="newTodo" 
+                                placeholder="What needs to be done?"
+                                @keyup.enter="addTodo()"
+                        />
+                        <button type="submit" 
+                                class="bg-green-100 text-xs p-3 text-green-900 hover:bg-green-300 transition duration-300 focus:outline-none"
+                                @click.prevent="addTodo()"
+
+                        >
+                                <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <template x-for="todo in todos">
+                        <div class="flex items-center justify-between">
+                            <div class="py-2 w-full" 
+                                    style="font-size: 0.7rem;" 
+                                    x-text="todo.content"
+                            >
+                            </div>
+                            <button type="button"
+                                    class="text-xs text-red-600 px-3 py-2 transition duration-300 hover:text-red-900 focus:outline-none"
+                                    @click="deleteTodo(todo)"
+                            >
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Counter -->
+                <template x-if="todos.length">
+                    <div class="text-gray-400 text-center mt-8" style="font-size: 0.7rem;">
+                        Nombre de tâche(s) : <span x-text="todos.length"></span>
+                    </div>
+                </template>
+            </div>  
+        </div>
+
+        <script>
+            function todolist() {
+                
+                return { 
+                    todos: [],
+
+                    newTodo: '',
+
+                    addTodo() {
+                        if(this.newTodo) {
+                            this.todos.push({
+                                id: this.todos.length,
+                                content: this.newTodo
+                            });
+
+                            this.newTodo='';
+                        }
+                    },
+
+                    deleteTodo(todo) {
+                        let position = this.todos.indexOf(todo)
+                        this.todos.splice(position, 1);
+                    }
+                }
+                
+            }
+        </script>
+
+    </body>
+</html>
